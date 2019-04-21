@@ -5,7 +5,6 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 
 public class MetropolisView extends JFrame {
     private JTextField continent, metropolis, population;
@@ -15,8 +14,8 @@ public class MetropolisView extends JFrame {
     private JTable table;
 
     private static final int FIELD_SIZE = 12;
-    private static final int APPLICATION_WIDTH = 600;
-    private static final int APPLICATION_HEIGHT= 400;
+    private static final int BOX_WIDTH = 150;
+    private static final int BOX_HEIGHT= 50;
 
     private static String LARGER_THAN = "Larger than";
     private static String SMALLER_THAN = "Smaller than or equal to";
@@ -25,28 +24,42 @@ public class MetropolisView extends JFrame {
 
     public MetropolisView(){
         super("Metropolis View");
+
         setLayout(new BorderLayout());
+
+        controller = new MetropolisController();
+        table = new JTable(controller);
+        JScrollPane scroll = new JScrollPane(table);
+
+        add(scroll, BorderLayout.CENTER);
+
         initFields();
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
-        controller = new MetropolisController();
+
         addAddListener();
         addSearchListener();
     }
 
-    private void addSearchListener() {
+    /**
+     * This method adds actionListeners of add
+     * */
+    private void addAddListener() {
         add.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                System.out.println("kaikai");
                 controller.addInfo(metropolis.getText().trim(), continent.getText().trim(), population.getText().trim());
-                ResultSet rs = controller.searchInfo(metropolis.getText().trim(), continent.getText().trim(), population.getText().trim(), false, true);
+                controller.searchInfo(metropolis.getText().trim(), continent.getText().trim(), population.getText().trim(), false, true);
             }
         });
     }
 
-    private void addAddListener() {
+    /**
+     * This method adds actionListeners of search
+     * */
+    private void addSearchListener() {
         search.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -57,11 +70,14 @@ public class MetropolisView extends JFrame {
                 if (exactBox.getSelectedIndex() == 0){
                     indName = true;
                 }
-                ResultSet rs = controller.searchInfo(metropolis.getText().trim(), continent.getText().trim(), population.getText().trim(), indPop, indName);
+                controller.searchInfo(metropolis.getText().trim(), continent.getText().trim(), population.getText().trim(), indPop, indName);
             }
         });
     }
 
+    /**
+     * This method initializes all graphics objects
+     * */
     private void initFields() {
         continent = new JTextField(FIELD_SIZE);
         metropolis = new JTextField(FIELD_SIZE);
@@ -72,11 +88,13 @@ public class MetropolisView extends JFrame {
         exactBox = new JComboBox();
         exactBox.setEditable(false);
         populationBox.setEditable(false);
-        populationBox.addItem("Larger than");
-        populationBox.addItem("Smaller than or equal to");
-        exactBox.addItem("Exact match");
-        exactBox.addItem("Partial match");
+        populationBox.addItem(LARGER_THAN);
+        populationBox.addItem(SMALLER_THAN);
+        exactBox.addItem(EXACT_MATCH);
+        exactBox.addItem(PARTIAL_MATCH);
 
+        populationBox.setMaximumSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
+        exactBox.setMaximumSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
 
         Container contNorth = new Container();
         contNorth.setLayout(new FlowLayout());

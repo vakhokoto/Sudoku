@@ -8,9 +8,9 @@ package assign3;
  */
 public class MyDBInfo {
 	
-	public static final String MYSQL_USERNAME = "root";
-	public static final String MYSQL_PASSWORD = "password";
-	public static final String MYSQL_DATABASE_SERVER = "jdbc:mysql://localhost:3306/";
-	public static final String MYSQL_DATABASE_NAME = "sys";
+	public static final String MYSQL_USERNAME = "";
+	public static final String MYSQL_PASSWORD = "";
+	public static final String MYSQL_DATABASE_SERVER = "";
+	public static final String MYSQL_DATABASE_NAME = "";
 
 }
